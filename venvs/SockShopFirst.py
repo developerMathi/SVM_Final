@@ -190,8 +190,8 @@ print(regressor.get_params(deep=True))
 # plt.ylabel('Latency')
 # plt.show()
 
-OrderServCore3D = np.arange(0, 1, 0.1)
-OrderDBServCore3D = np.arange(0, 1, 0.1)
+OrderServCore3D = np.arange(0, 1, 0.01)
+OrderDBServCore3D = np.arange(0, 1, 0.01)
 
 xorderGrid=[]
 xorderDBGrid=[]
@@ -214,10 +214,12 @@ for i in OrderServCore3D:
 newXnormalizedcores = sc_X.fit_transform(recreated3D)
 ax = plt.axes(projection="3d")
 ax.plot3D(xorderGrid, xorderDBGrid,  sc_y.inverse_transform(regressor.predict(newXnormalizedcores)))
-plt.xlabel('Cores')
-plt.ylabel('Memory')
+plt.xlabel('Cores(Orders)')
+plt.ylabel('Cores(OrderDB)')
 plt.show(block=True)
 plt.interactive(False)
+
+print(xorderGrid[24],xorderDBGrid[24],recreated3D[24])
 
 # print(sc_y.inverse_transform(regressor.predict(sc_X.fit_transform([[2, 500, 1024, 100003]]))))
 #
