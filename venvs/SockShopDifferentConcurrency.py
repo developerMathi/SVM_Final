@@ -31,7 +31,7 @@ print('Number of rows to train the database ', numberOfRowsToTrain)
 print('Number of rows to test the database ', numberOfRowsToTest)
 
 # get full dataset
-X = dataset.iloc[:nor, [0,1,2,3,4,5]].values
+X = dataset.iloc[:nor, [0, 1, 2, 3, 4, 5]].values
 y = dataset.iloc[:nor, [7]].values
 # 0-Order API Concurrency
 # 1-Carts API Concurrency
@@ -40,7 +40,7 @@ y = dataset.iloc[:nor, [7]].values
 # 4-Carts Cores
 # 5-Carts DB Cores
 
-# 3-Average latency
+# 7-Average latency
 
 # Standardization of data
 from sklearn.preprocessing import StandardScaler
@@ -78,33 +78,6 @@ cGrid = []
 degreeGrid = []
 epsilonValues = []
 
-# cs = np.arange(0.1, 20, 0.5)
-# for i in cs:
-#     regressor = SVR(kernel='rbf', C=i)
-#     regressor.fit(XTrain, yTrain)
-#
-#     yTestPredict = regressor.predict(XTest)
-#     mse = mean_squared_error(yTest, yTestPredict, squared=True)
-#     rmse = mean_squared_error(yTest, yTestPredict, squared=False)
-#     mae = mean_absolute_error(yTest, yTestPredict)
-#     mape = mean_absolute_percentage_error(yTest, yTestPredict)
-#     mseValues.append(mse)
-#     rmseValues.append(rmse)
-#     maeValues.append(mae)
-#     mapeValues.append(mape)
-#     cGrid.append(regressor.C)
-#     degreeGrid.append(regressor.degree)
-#     epsilonValues.append(regressor.epsilon)
-#     print('C value is ', regressor.C)
-#     print('Kernal is ', regressor.kernel)
-#     print("The mean squared error (MSE) on test set: {:.4f}".format(mse))
-#     print("The root Mean Square Error (RMSE) on test set: {:.4f}".format(rmse))
-#     print("The mean absolute error on test set: {:.4f}".format(mae))
-#     print("The mean absolute percentage error on test set: {:.4f}".format(mape))
-#     print()
-#     print()
-
-# regressor = SVR(kernel='rbf',C=5.0, epsilon=0.1)
 regressor = SVR()
 regressor.fit(XTrain, yTrain)
 
@@ -120,137 +93,17 @@ print("The mean absolute error on test set: {:.4f}".format(mae))
 print("The mean absolute percentage error on test set: {:.4f}".format(mape))
 print(regressor.get_params(deep=True))
 
-# plt.plot(degreeGrid, mseValues, color='blue')
-# plt.xlabel('degree values')
-# plt.ylabel('Mean square error values')
-# plt.title('kernel = poly')
-# plt.show()
-#
-# plt.plot(degreeGrid, rmseValues, color='red')
-# plt.xlabel('degree values')
-# plt.ylabel('Root mean square error values')
-# plt.title('kernel = poly')
-# plt.show()
-#
-# plt.plot(degreeGrid, maeValues, color='green')
-# plt.xlabel('degree values')
-# plt.ylabel('Mean absolute error values')
-# plt.title('kernel = poly')
-# plt.show()
+# prediction part
+Order_API_Concurrency = 5
+Carts_API_Concurrency = 5
+Order_Cores = 0.2
+Order_DB_Cores = 0.2
+Carts_Cores = 0.2
+Carts_DB_Cores = 0.2
 
-# plt.plot(cGrid, mapeValues, color='green')
-# plt.xlabel('C values')
-# plt.ylabel('Mean absolute percentage error values')
-# plt.title('kernel = rbf')
-# plt.show()
+new_X = [Order_API_Concurrency, Carts_API_Concurrency, Order_Cores, Order_DB_Cores, Carts_Cores, Carts_DB_Cores]
+print()
+print('X value ', new_X)
 
-# listGridc = np.arange(0.2, 2.2, 0.1)
-# recreatedGridc = []
-# for i in listGridc:
-#     li = [0, 0, 0, 0]
-#     li[0] = 1024
-#     li[1] = 500
-#     li[2] = i
-#     li[3] = 100003
-#     recreatedGridc.append(li)
-
-# newXnormalizedc = sc_X.fit_transform(recreatedGridc)
-# # yPred=sc_y.inverse_transform(regressor.predict(newXnormalized))
-# # print(yPred)
-# plt.plot(listGridc, sc_y.inverse_transform(regressor.predict(newXnormalizedc)), color='orange')
-# plt.xlabel('cores')
-# plt.ylabel('Latency')
-# plt.show()
-
-# listGridm = np.arange(1, 1025, 20)
-# recreatedGridm = []
-# for i in listGridm:
-#     li = [0, 0, 0, 0]
-#     li[0] = i
-#     li[1] = 500
-#     li[2] = 2
-#     li[3] = 100003
-#     recreatedGridm.append(li)
-#
-# newXnormalizedm = sc_X.fit_transform(recreatedGridm)
-# plt.plot(listGridm, sc_y.inverse_transform(regressor.predict(newXnormalizedm)), color='orange')
-# plt.xlabel('Memory size')
-# plt.ylabel('Latency')
-# plt.show()
-#
-# listGridcon = np.arange(100, 501, 10)
-# recreatedGridcon = []
-# for i in listGridcon:
-#     li = [0, 0, 0, 0]
-#     li[0] = 1024
-#     li[1] = i
-#     li[2] = 2
-#     li[3] = 100003
-#     recreatedGridcon.append(li)
-#
-# newXnormalizedcon = sc_X.fit_transform(recreatedGridcon)
-# plt.plot(listGridcon, sc_y.inverse_transform(regressor.predict(newXnormalizedcon)), color='orange')
-# plt.xlabel('Concurrency')
-# plt.ylabel('Latency')
-# plt.show()
-
-OrderServCore3D = np.arange(0, 1, 0.01)
-OrderDBServCore3D = np.arange(0, 1, 0.01)
-
-xorderGrid=[]
-xorderDBGrid=[]
-
-recreated3D = []
-for i in OrderServCore3D:
-    for j in OrderDBServCore3D:
-        Ylet=[0,0]
-        xorderGrid.append(i)
-        xorderDBGrid.append(j)
-        Ylet[0]=i
-        Ylet[1]=j
-        recreated3D.append(Ylet)
-
-
-
-
-
-
-newXnormalizedcores = sc_X.fit_transform(recreated3D)
-ax = plt.axes(projection="3d")
-ax.plot3D(xorderGrid, xorderDBGrid,  sc_y.inverse_transform(regressor.predict(newXnormalizedcores)))
-plt.xlabel('Cores(Orders)')
-plt.ylabel('Cores(OrderDB)')
-plt.show(block=True)
-plt.interactive(False)
-
-print(xorderGrid[24],xorderDBGrid[24],recreated3D[24])
-
-# print(sc_y.inverse_transform(regressor.predict(sc_X.fit_transform([[2, 500, 1024, 100003]]))))
-#
-# ax = plt.axes(projection="3d")
-# xxx = np.linspace(0, 2, 20)
-# yyy = np.linspace(0, 1024, 20)
-#
-#
-# def z_function(xxx, yyy):
-#     return np.int(regressor.predict([[yyy, 500, xxx, 100003]])[0])
-#
-# def z_functionnor(xxx, yyy):
-#     print([[yyy, 500, xxx, 100003]])
-#     return sc_X.fit_transform([[yyy, 500, xxx, 100003]])
-#
-#
-# def z_functions(xxx, yyy):
-#     return xxx ** 2 + yyy ** 2
-#
-#
-# print(z_function(2, 1024))
-# print(z_function(1, 512))
-# print(z_function(0, 0))
-# print(z_function(0, 1024))
-# print(z_functions(2, 512))
-# # X, Y = np.meshgrid(x, y)
-# # print(X, Y)
-# ax.plot3D(xxx, yyy, z_function(xxx, yyy))
-#
-# plt.show()
+predicted_y= sc_y.inverse_transform(regressor.predict(sc_X.fit_transform([new_X])))
+print('Predicted y ',predicted_y)
